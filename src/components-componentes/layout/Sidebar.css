@@ -20,7 +20,7 @@
   flex-direction: column;
   z-index: 100;
   overflow-y: auto;
-  transition: transform var(--transition-base);
+  transition: transform var(--transition-base), background-color var(--transition-base), border-color var(--transition-base);
 }
 
 /* Brand */
@@ -33,18 +33,19 @@
 }
 
 .sidebar-logo {
-  font-size: 1.75rem;
-  width: 44px;
-  height: 44px;
+  font-size: 1.5rem;
+  width: 42px;
+  height: 42px;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--accent-gradient);
+  background: var(--text-primary);
+  color: var(--bg-primary);
   border-radius: var(--radius-md);
 }
 
 .sidebar-title {
-  font-size: var(--font-size-lg);
+  font-size: var(--font-size-md);
   font-weight: 800;
   color: var(--text-primary);
   line-height: 1.2;
@@ -60,22 +61,22 @@
   display: flex;
   align-items: center;
   gap: var(--space-md);
-  padding: var(--space-lg) var(--space-xl);
+  padding: var(--space-md) var(--space-xl);
   border-bottom: 1px solid var(--border-subtle);
   background: var(--bg-glass);
 }
 
 .sidebar-avatar {
-  width: 38px;
-  height: 38px;
+  width: 36px;
+  height: 36px;
   border-radius: var(--radius-full);
-  background: var(--accent-gradient);
+  background: var(--text-primary);
+  color: var(--bg-primary);
   display: flex;
   align-items: center;
   justify-content: center;
   font-weight: 700;
-  font-size: var(--font-size-sm);
-  color: #fff;
+  font-size: var(--font-size-xs);
   flex-shrink: 0;
 }
 
@@ -103,7 +104,7 @@
 }
 
 .sidebar-section {
-  padding: var(--space-sm) 0;
+  padding: var(--space-xs) 0;
 }
 
 .sidebar-section-label {
@@ -140,8 +141,9 @@
 }
 
 .sidebar-link.active {
-  color: var(--accent-primary);
-  background: rgba(102, 126, 234, 0.08);
+  color: var(--text-primary);
+  background: var(--bg-glass-hover);
+  font-weight: 600;
 }
 
 .sidebar-link.active::before {
@@ -152,7 +154,7 @@
   transform: translateY(-50%);
   width: 3px;
   height: 60%;
-  background: var(--accent-gradient);
+  background: var(--text-primary);
   border-radius: 0 3px 3px 0;
 }
 

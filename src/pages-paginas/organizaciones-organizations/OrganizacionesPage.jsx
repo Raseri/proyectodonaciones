@@ -95,24 +95,22 @@ const LOGO_MAP = {
 export default function OrganizacionesPage() {
   const { isAdmin } = usePermissions();
 
-  // Modo claro / oscuro (soporte con persistencia y compatibilidad total)
+  // Modo claro / oscuro sincronizado globalmente con toda la aplicación
   const [theme, setTheme] = useState(() => {
-    return localStorage.getItem('theme_mode_org') || 'dark';
+    return document.documentElement.getAttribute('data-theme') || localStorage.getItem('app_theme') || 'dark';
   });
 
   const [search, setSearch] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('Todas');
   const [statusFilter, setStatusFilter] = useState('TODAS'); // 'TODAS' | 'ACTIVAS' | 'INACTIVAS'
 
-  // Estado local para permitir administración en vivo y renderizado instantáneo
+  // Estado de organizaciones maestras sincronizado con almacenamiento local
   const [organizaciones, setOrganizaciones] = useState(() => {
-    // Sincronizar con el almacenamiento local manteniendo las 5 organizaciones maestras
     try {
       const stored = localStorage.getItem('donaciones_organizations');
       if (stored) {
         const parsed = JSON.parse(stored);
         if (Array.isArray(parsed) && parsed.length > 0) {
-          // Fusionar con datos oficiales y logos
           return ORGANIZACIONES_REALES.map(real => {
             const match = parsed.find(p => p.id === real.id);
             return match ? { ...real, status: match.status || real.status } : real;
@@ -120,16 +118,32 @@ export default function OrganizacionesPage() {
         }
       }
     } catch {
-      // Fallback a la lista maestra si hay error en parsing
+      // ignore
     }
     return ORGANIZACIONES_REALES;
   });
 
-  // Guardar preferencia de tema
+  // Escuchar cambios de tema globales (desde el Header u otras vistas)
+  useEffect(() => {
+    const currentTheme = document.documentElement.getAttribute('data-theme') || localStorage.getItem('app_theme') || 'dark';
+    setTheme(currentTheme);
+
+    const observer = new MutationObserver(() => {
+      const updatedTheme = document.documentElement.getAttribute('data-theme') || 'dark';
+      setTheme(updatedTheme);
+    });
+
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+    return () => observer.disconnect();
+  }, []);
+
+  // Guardar preferencia y alternar tema en toda la app
   const toggleTheme = () => {
     const nextTheme = theme === 'dark' ? 'light' : 'dark';
     setTheme(nextTheme);
+    document.documentElement.setAttribute('data-theme', nextTheme);
     try {
+      localStorage.setItem('app_theme', nextTheme);
       localStorage.setItem('theme_mode_org', nextTheme);
     } catch {
       // ignore
