@@ -39,7 +39,7 @@ export default function LoginPage() {
       <div className="auth-bg-decoration" />
       <div className="auth-container animate-slide-up">
         <div className="auth-header">
-          <div className="auth-logo">💝</div>
+          <div className="auth-logo">67</div>
           <h1 className="auth-title">Bienvenido</h1>
           <p className="auth-subtitle">Inicia sesión en el Sistema de Donaciones</p>
         </div>
