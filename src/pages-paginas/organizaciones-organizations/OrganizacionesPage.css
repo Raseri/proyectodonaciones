@@ -1,0 +1,541 @@
+/* ============================================================
+   ORGANIZACIONES PAGE — UI/UX Redesign
+   Paleta sobria, moderna y elegante (sin tonos morados ni neones IA).
+   Soporte completo para Modo Claro (#F8FAFC, #FFFFFF, #E2E8F0)
+   y Modo Oscuro (#0D1117, #18181B, #27272A).
+   ============================================================ */
+
+/* ── Light Mode Variables ───────────────────────────────── */
+.organizaciones-view.theme-light {
+  --org-bg-page: #F8FAFC;
+  --org-card-bg: #FFFFFF;
+  --org-card-border: #E2E8F0;
+  --org-card-hover-border: #CBD5E1;
+  --org-card-shadow: 0 1px 3px rgba(15, 23, 42, 0.05), 0 4px 12px rgba(15, 23, 42, 0.03);
+  --org-card-shadow-hover: 0 8px 24px -4px rgba(15, 23, 42, 0.08), 0 2px 6px -1px rgba(15, 23, 42, 0.04);
+
+  --org-text-primary: #0F172A;
+  --org-text-secondary: #64748B;
+  --org-text-muted: #94A3B8;
+
+  --org-input-bg: #FFFFFF;
+  --org-input-border: #CBD5E1;
+  --org-input-focus-border: #0F172A;
+  --org-input-focus-ring: rgba(15, 23, 42, 0.06);
+
+  --org-logo-bg: #FFFFFF;
+  --org-logo-border: #E2E8F0;
+
+  --org-badge-cat-bg: #F1F5F9;
+  --org-badge-cat-border: #E2E8F0;
+  --org-badge-cat-text: #475569;
+
+  /* Badges sutiles y elegantes (modo claro) */
+  --org-badge-activa-bg: #F0FDF4;
+  --org-badge-activa-border: #BBF7D0;
+  --org-badge-activa-text: #166534;
+  --org-badge-activa-dot: #22C55E;
+
+  --org-badge-inactiva-bg: #F8FAFC;
+  --org-badge-inactiva-border: #E2E8F0;
+  --org-badge-inactiva-text: #64748B;
+  --org-badge-inactiva-dot: #94A3B8;
+
+  --org-btn-primary-bg: #0F172A;
+  --org-btn-primary-text: #FFFFFF;
+  --org-btn-primary-hover: #1E293B;
+
+  --org-btn-secondary-bg: #FFFFFF;
+  --org-btn-secondary-text: #334155;
+  --org-btn-secondary-border: #CBD5E1;
+  --org-btn-secondary-hover: #F1F5F9;
+
+  --org-info-row-border: #F1F5F9;
+  --org-highlight-bg: #F8FAFC;
+}
+
+/* ── Dark Mode Variables ────────────────────────────────── */
+.organizaciones-view.theme-dark {
+  --org-bg-page: #0D1117;
+  --org-card-bg: #18181B;
+  --org-card-border: #27272A;
+  --org-card-hover-border: #3F3F46;
+  --org-card-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+  --org-card-shadow-hover: 0 10px 28px -4px rgba(0, 0, 0, 0.45);
+
+  --org-text-primary: #F4F4F5;
+  --org-text-secondary: #A1A1AA;
+  --org-text-muted: #71717A;
+
+  --org-input-bg: #141416;
+  --org-input-border: #27272A;
+  --org-input-focus-border: #A1A1AA;
+  --org-input-focus-ring: rgba(244, 244, 245, 0.08);
+
+  --org-logo-bg: #202024;
+  --org-logo-border: #2E2E33;
+
+  --org-badge-cat-bg: #222226;
+  --org-badge-cat-border: #2E2E33;
+  --org-badge-cat-text: #D4D4D8;
+
+  /* Badges sutiles y elegantes (modo oscuro) */
+  --org-badge-activa-bg: rgba(34, 197, 94, 0.08);
+  --org-badge-activa-border: rgba(34, 197, 94, 0.22);
+  --org-badge-activa-text: #86EFAC;
+  --org-badge-activa-dot: #4ADE80;
+
+  --org-badge-inactiva-bg: rgba(161, 161, 170, 0.07);
+  --org-badge-inactiva-border: rgba(161, 161, 170, 0.18);
+  --org-badge-inactiva-text: #A1A1AA;
+  --org-badge-inactiva-dot: #71717A;
+
+  --org-btn-primary-bg: #F4F4F5;
+  --org-btn-primary-text: #09090B;
+  --org-btn-primary-hover: #FFFFFF;
+
+  --org-btn-secondary-bg: #222226;
+  --org-btn-secondary-text: #E4E4E7;
+  --org-btn-secondary-border: #2E2E33;
+  --org-btn-secondary-hover: #2B2B30;
+
+  --org-info-row-border: #222226;
+  --org-highlight-bg: #141416;
+}
+
+/* ── Container Layout ──────────────────────────────────── */
+.organizaciones-view {
+  background: var(--org-bg-page);
+  color: var(--org-text-primary);
+  min-height: calc(100vh - 120px);
+  border-radius: 16px;
+  padding: 2rem;
+  transition: background-color 250ms ease, color 250ms ease;
+  box-sizing: border-box;
+}
+
+/* ── Header ────────────────────────────────────────────── */
+.org-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.org-header-left {
+  max-width: 680px;
+}
+
+.org-title {
+  font-size: 1.875rem;
+  font-weight: 800;
+  color: var(--org-text-primary);
+  letter-spacing: -0.025em;
+  margin-bottom: 0.375rem;
+  line-height: 1.2;
+}
+
+.org-subtitle {
+  font-size: 0.9375rem;
+  color: var(--org-text-secondary);
+  line-height: 1.5;
+}
+
+.org-header-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+/* ── Theme Switcher Button ─────────────────────────────── */
+.org-theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: var(--org-card-bg);
+  color: var(--org-text-primary);
+  border: 1px solid var(--org-card-border);
+  padding: 0.5rem 0.875rem;
+  border-radius: 8px;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 180ms ease;
+}
+
+.org-theme-toggle:hover {
+  border-color: var(--org-card-hover-border);
+  box-shadow: var(--org-card-shadow);
+}
+
+/* ── Filters & Search ──────────────────────────────────── */
+.org-controls-bar {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.org-search-row {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.org-search-input-wrapper {
+  position: relative;
+  flex: 1;
+  min-width: 280px;
+  max-width: 440px;
+}
+
+.org-search-icon {
+  position: absolute;
+  left: 0.875rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--org-text-muted);
+  pointer-events: none;
+  font-size: 0.9rem;
+}
+
+.org-search-input {
+  width: 100%;
+  padding: 0.625rem 0.875rem 0.625rem 2.375rem;
+  background: var(--org-input-bg);
+  border: 1px solid var(--org-input-border);
+  border-radius: 8px;
+  color: var(--org-text-primary);
+  font-size: 0.875rem;
+  outline: none;
+  transition: border-color 180ms ease, box-shadow 180ms ease;
+}
+
+.org-search-input:focus {
+  border-color: var(--org-input-focus-border);
+  box-shadow: 0 0 0 3px var(--org-input-focus-ring);
+}
+
+.org-search-input::placeholder {
+  color: var(--org-text-muted);
+}
+
+.org-filter-pills {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.org-pill {
+  background: var(--org-card-bg);
+  color: var(--org-text-secondary);
+  border: 1px solid var(--org-card-border);
+  padding: 0.375rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 150ms ease;
+  white-space: nowrap;
+}
+
+.org-pill:hover {
+  color: var(--org-text-primary);
+  border-color: var(--org-card-hover-border);
+}
+
+.org-pill.active {
+  background: var(--org-btn-primary-bg);
+  color: var(--org-btn-primary-text);
+  border-color: var(--org-btn-primary-bg);
+  font-weight: 600;
+}
+
+.org-count-meta {
+  font-size: 0.8125rem;
+  color: var(--org-text-muted);
+  margin-left: auto;
+}
+
+/* ── Organizations Grid ────────────────────────────────── */
+.org-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 1.5rem;
+}
+
+/* ── Organization Card ─────────────────────────────────── */
+.org-card {
+  background: var(--org-card-bg);
+  border: 1px solid var(--org-card-border);
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: var(--org-card-shadow);
+  display: flex;
+  flex-direction: column;
+  transition: transform 200ms ease, border-color 200ms ease, box-shadow 200ms ease;
+  position: relative;
+}
+
+.org-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--org-card-hover-border);
+  box-shadow: var(--org-card-shadow-hover);
+}
+
+/* ── Card Header (Logo + Names + Status Badge) ─────────── */
+.org-card-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-bottom: 1.125rem;
+}
+
+.org-logo-container {
+  width: 56px;
+  height: 56px;
+  min-width: 56px;
+  background: var(--org-logo-bg);
+  border: 1px solid var(--org-logo-border);
+  border-radius: 10px;
+  padding: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.org-logo-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+.org-card-title-group {
+  flex: 1;
+  min-width: 0;
+}
+
+.org-card-title {
+  font-size: 1.0625rem;
+  font-weight: 700;
+  color: var(--org-text-primary);
+  margin: 0 0 0.25rem 0;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+}
+
+.org-category-badge {
+  display: inline-block;
+  background: var(--org-badge-cat-bg);
+  color: var(--org-badge-cat-text);
+  border: 1px solid var(--org-badge-cat-border);
+  padding: 0.1875rem 0.5rem;
+  border-radius: 6px;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+/* ── Badges de Estado Sutiles y Elegantes ───────────────── */
+.org-status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 0.25rem 0.625rem;
+  border-radius: 9999px;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.org-status-badge.activa {
+  background: var(--org-badge-activa-bg);
+  border: 1px solid var(--org-badge-activa-border);
+  color: var(--org-badge-activa-text);
+}
+
+.org-status-badge.activa .org-status-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--org-badge-activa-dot);
+}
+
+.org-status-badge.inactiva {
+  background: var(--org-badge-inactiva-bg);
+  border: 1px solid var(--org-badge-inactiva-border);
+  color: var(--org-badge-inactiva-text);
+}
+
+.org-status-badge.inactiva .org-status-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--org-badge-inactiva-dot);
+}
+
+/* ── Card Description ──────────────────────────────────── */
+.org-card-description {
+  font-size: 0.84375rem;
+  line-height: 1.55;
+  color: var(--org-text-secondary);
+  margin-bottom: 1.25rem;
+  flex-grow: 1;
+}
+
+/* ── Card Contact Info ─────────────────────────────────── */
+.org-card-contact {
+  border-top: 1px solid var(--org-info-row-border);
+  padding-top: 0.875rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4375rem;
+  margin-bottom: 1.125rem;
+}
+
+.org-contact-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.75rem;
+  color: var(--org-text-secondary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.org-contact-icon {
+  color: var(--org-text-muted);
+  font-size: 0.8125rem;
+  flex-shrink: 0;
+  width: 16px;
+  display: inline-flex;
+  justify-content: center;
+}
+
+.org-contact-link {
+  color: var(--org-text-secondary);
+  text-decoration: none;
+  transition: color 150ms ease;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.org-contact-link:hover {
+  color: var(--org-text-primary);
+  text-decoration: underline;
+}
+
+/* ── Card Actions ──────────────────────────────────────── */
+.org-card-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-top: auto;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--org-info-row-border);
+}
+
+.org-btn-donate {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.375rem;
+  background: var(--org-btn-primary-bg);
+  color: var(--org-btn-primary-text);
+  border: 1px solid transparent;
+  padding: 0.4375rem 0.875rem;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  transition: opacity 150ms ease, transform 150ms ease;
+}
+
+.org-btn-donate:hover {
+  opacity: 0.92;
+  color: var(--org-btn-primary-text);
+  transform: translateY(-1px);
+}
+
+.org-btn-toggle-status {
+  background: transparent;
+  border: 1px solid var(--org-card-border);
+  color: var(--org-text-secondary);
+  padding: 0.375rem 0.625rem;
+  border-radius: 6px;
+  font-size: 0.6875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 150ms ease;
+}
+
+.org-btn-toggle-status:hover {
+  color: var(--org-text-primary);
+  border-color: var(--org-card-hover-border);
+  background: var(--org-highlight-bg);
+}
+
+/* ── Empty State ───────────────────────────────────────── */
+.org-empty-state {
+  text-align: center;
+  padding: 4rem 1.5rem;
+  background: var(--org-card-bg);
+  border: 1px solid var(--org-card-border);
+  border-radius: 12px;
+}
+
+.org-empty-icon {
+  font-size: 2.5rem;
+  color: var(--org-text-muted);
+  margin-bottom: 0.75rem;
+}
+
+.org-empty-title {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--org-text-primary);
+  margin-bottom: 0.25rem;
+}
+
+.org-empty-desc {
+  font-size: 0.875rem;
+  color: var(--org-text-secondary);
+}
+
+/* ── Responsive ────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .organizaciones-view {
+    padding: 1.25rem;
+    border-radius: 12px;
+  }
+
+  .org-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .org-header-controls {
+    justify-content: flex-start;
+  }
+
+  .org-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .org-search-input-wrapper {
+    max-width: 100%;
+  }
+}

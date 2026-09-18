@@ -1,0 +1,31 @@
+/* ── MainLayout Styles ─────────────────────────────────── */
+
+.main-layout {
+  display: flex;
+  min-height: 100vh;
+}
+
+.main-content {
+  flex: 1;
+  margin-left: var(--sidebar-width);
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  transition: margin-left var(--transition-base);
+}
+
+.main-page {
+  flex: 1;
+  padding: var(--space-2xl);
+  animation: fadeIn 300ms ease-out;
+}
+
+@media (max-width: 768px) {
+  .main-content {
+    margin-left: 0;
+  }
+
+  .main-page {
+    padding: var(--space-lg);
+  }
+}
