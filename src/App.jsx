@@ -3,8 +3,8 @@
  */
 
 import { BrowserRouter } from 'react-router-dom';
-import { AuthProvider } from './context-estado-global/AuthContext';
-import AppRoutes from './routes-navegacion/AppRoutes';
+import { AuthProvider } from './contexto/AuthContext';
+import AppRoutes from './rutas/AppRoutes';
 
 export default function App() {
   return (
