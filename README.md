@@ -2,6 +2,10 @@
 
 Aplicación React/Vite para gestionar usuarios, roles y donaciones, con un backend Express, SQLite, JWT y pruebas con Jest/Supertest.
 
+## JWT en desarrollo local
+
+El backend usa `process.env.JWT_SECRET` cuando está configurado. Si no existe, utiliza una clave predeterminada únicamente para desarrollo local, por lo que `npm run backend` funciona sin crear un archivo `.env`. En producción, `JWT_SECRET` es obligatorio y debe configurarse mediante variables de entorno con un valor seguro.
+
 ## CI/CD
 
 El workflow `.github/workflows/ci-cd.yml` se ejecuta en cada `push` a `main` y en cada `pull_request` hacia `main`.
