@@ -1,6 +1,5 @@
 import jwt from 'jsonwebtoken';
-
-const getJwtSecret = () => process.env.JWT_SECRET;
+import { getJwtSecret } from '../config/jwt.js';
 
 export function authenticateToken(req, res, next) {
   const authorization = req.headers.authorization;

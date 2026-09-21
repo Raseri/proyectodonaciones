@@ -1,6 +1,7 @@
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { getOne, run } from '../config/database.js';
+import { getJwtSecret } from '../config/jwt.js';
 
 function publicUser(user) {
   return {
@@ -13,7 +14,7 @@ function publicUser(user) {
 }
 
 function createToken(user) {
-  const secret = process.env.JWT_SECRET;
+  const secret = getJwtSecret();
   if (!secret) {
     const error = new Error('JWT_SECRET no configurado.');
     error.status = 500;
