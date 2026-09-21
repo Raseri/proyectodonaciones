@@ -1,4 +1,4 @@
-import { getAll, getOne } from '../config/database.js';
+import { getAll, getOne, run } from '../config/database.js';
 
 function publicUser(user) {
   return {
