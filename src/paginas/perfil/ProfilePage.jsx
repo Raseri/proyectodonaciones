@@ -19,10 +19,10 @@ export default function ProfilePage() {
 
   const update = (field, value) => setForm({ ...form, [field]: value });
 
-  const handleSave = (e) => {
+  const handleSave = async (e) => {
     e.preventDefault();
     setError('');
-    const result = updateProfile(form);
+    const result = await updateProfile(form);
     if (result.success) {
       setMessage('Perfil actualizado correctamente.');
       setEditing(false);

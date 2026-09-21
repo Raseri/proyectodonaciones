@@ -18,20 +18,15 @@ export default function LoginPage() {
     return <Navigate to="/dashboard" replace />;
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
     setLoading(true);
 
-    setTimeout(() => {
-      const result = login(form.email, form.password);
-      if (result.success) {
-        navigate('/dashboard');
-      } else {
-        setError(result.error);
-      }
-      setLoading(false);
-    }, 500);
+    const result = await login(form.email, form.password);
+    if (result.success) navigate('/dashboard');
+    else setError(result.error);
+    setLoading(false);
   };
 
   return (

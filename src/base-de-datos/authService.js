@@ -1,109 +1,95 @@
-/**
- * Servicio de autenticación mock.
- * Simula login, registro y gestión de sesión con localStorage.
- */
+/** Servicio de autenticación conectado al backend JWT. */
 
-import { getUsers, setUsers, getCurrentUser, setCurrentUser } from './mockData';
-import { ROLES } from '../utilidades/constants';
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api';
+const TOKEN_KEY = 'donaciones_access_token';
+
+function mapUser(user) {
+  const [nombre, ...apellidos] = (user.name || '').trim().split(/\s+/);
+  return {
+    id: user.id,
+    nombre: nombre || '',
+    apellido: apellidos.join(' '),
+    email: user.email,
+    role: user.role,
+    activo: true,
+    fechaCreacion: user.created_at,
+  };
+}
+
+async function request(path, options = {}) {
+  const response = await fetch(`${API_URL}${path}`, {
+    ...options,
+    headers: { 'Content-Type': 'application/json', ...options.headers },
+  });
+  const data = await response.json().catch(() => ({}));
+  if (!response.ok) throw new Error(data.error || 'No se pudo completar la solicitud.');
+  return data;
+}
 
 export const authService = {
-  /**
-   * Inicia sesión con email y contraseña.
-   */
-  login(email, password) {
-    const users = getUsers();
-    const user = users.find(u => u.email === email && u.password === password);
-
-    if (!user) {
-      return { success: false, error: 'Email o contraseña incorrectos.' };
+  async login(email, password) {
+    try {
+      const data = await request('/auth/login', {
+        method: 'POST',
+        body: JSON.stringify({ email, password }),
+      });
+      localStorage.setItem(TOKEN_KEY, data.token);
+      return { success: true, user: mapUser(data.user) };
+    } catch (error) {
+      return { success: false, error: error.message };
     }
-
-    if (!user.activo) {
-      return { success: false, error: 'Tu cuenta ha sido desactivada. Contacta al administrador.' };
-    }
-
-    const safeUser = { ...user };
-    delete safeUser.password;
-    setCurrentUser(safeUser);
-
-    return { success: true, user: safeUser };
   },
 
-  /**
-   * Registra un nuevo usuario con rol USER.
-   */
-  register({ nombre, apellido, email, password, telefono, direccion }) {
-    const users = getUsers();
-
-    if (users.find(u => u.email === email)) {
-      return { success: false, error: 'Ya existe una cuenta con ese email.' };
+  async register({ nombre, apellido, email, password }) {
+    try {
+      const data = await request('/auth/register', {
+        method: 'POST',
+        body: JSON.stringify({ name: `${nombre} ${apellido}`.trim(), email, password }),
+      });
+      localStorage.setItem(TOKEN_KEY, data.token);
+      return { success: true, user: mapUser(data.user) };
+    } catch (error) {
+      return { success: false, error: error.message };
     }
-
-    const newUser = {
-      id: 'usr-' + String(Date.now()).slice(-6),
-      nombre,
-      apellido,
-      email,
-      password,
-      role: ROLES.USER,
-      telefono: telefono || '',
-      direccion: direccion || '',
-      activo: true,
-      fechaCreacion: new Date().toISOString(),
-    };
-
-    users.push(newUser);
-    setUsers(users);
-
-    const safeUser = { ...newUser };
-    delete safeUser.password;
-    setCurrentUser(safeUser);
-
-    return { success: true, user: safeUser };
   },
 
   /**
    * Cierra la sesión actual.
    */
   logout() {
-    setCurrentUser(null);
+    localStorage.removeItem(TOKEN_KEY);
   },
 
-  /**
-   * Obtiene el usuario actualmente autenticado.
-   */
-  getCurrentUser() {
-    return getCurrentUser();
+  async getCurrentUser() {
+    const token = localStorage.getItem(TOKEN_KEY);
+    if (!token) return null;
+
+    try {
+      const data = await request('/users/me', {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      return mapUser(data.user);
+    } catch {
+      localStorage.removeItem(TOKEN_KEY);
+      return null;
+    }
   },
 
-  /**
-   * Actualiza los datos del perfil del usuario actual.
-   */
-  updateProfile(userId, updates) {
-    const users = getUsers();
-    const index = users.findIndex(u => u.id === userId);
+  async updateProfile(userId, updates) {
+    const token = localStorage.getItem(TOKEN_KEY);
+    if (!token) return { success: false, error: 'Sesión no válida.' };
 
-    if (index === -1) {
-      return { success: false, error: 'Usuario no encontrado.' };
+    try {
+      const data = await request('/users/me', {
+        method: 'PUT',
+        headers: { Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ name: `${updates.nombre} ${updates.apellido}`.trim() }),
+      });
+      return { success: true, user: mapUser(data.user) };
+    } catch (error) {
+      return { success: false, error: error.message };
     }
-
-    // No permitir cambios de rol desde updateProfile
-    delete updates.role;
-    delete updates.password;
-    delete updates.id;
-
-    users[index] = { ...users[index], ...updates };
-    setUsers(users);
-
-    const safeUser = { ...users[index] };
-    delete safeUser.password;
-
-    // Si es el usuario actual, actualizar la sesión
-    const current = getCurrentUser();
-    if (current && current.id === userId) {
-      setCurrentUser(safeUser);
-    }
-
-    return { success: true, user: safeUser };
   },
 };
+
+export { TOKEN_KEY };

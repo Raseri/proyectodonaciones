@@ -20,7 +20,7 @@ export default function RegisterPage() {
     return <Navigate to="/dashboard" replace />;
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
 
@@ -35,15 +35,10 @@ export default function RegisterPage() {
     }
 
     setLoading(true);
-    setTimeout(() => {
-      const result = register(form);
-      if (result.success) {
-        navigate('/dashboard');
-      } else {
-        setError(result.error);
-      }
-      setLoading(false);
-    }, 500);
+    const result = await register(form);
+    if (result.success) navigate('/dashboard');
+    else setError(result.error);
+    setLoading(false);
   };
 
   const update = (field, value) => setForm({ ...form, [field]: value });

@@ -4,7 +4,6 @@
 
 import { createContext, useContext, useState, useEffect } from 'react';
 import { authService } from '../base-de-datos/authService';
-import { initializeMockData } from '../base-de-datos/mockData';
 import { getPermissions } from '../utilidades/permissions';
 
 const AuthContext = createContext(null);
@@ -14,19 +13,18 @@ export function AuthProvider({ children }) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Inicializar datos mock y restaurar sesión
   useEffect(() => {
-    initializeMockData();
-    const savedUser = authService.getCurrentUser();
-    if (savedUser) {
-      setUser(savedUser);
-      setIsAuthenticated(true);
-    }
-    setIsLoading(false);
+    authService.getCurrentUser().then(savedUser => {
+      if (savedUser) {
+        setUser(savedUser);
+        setIsAuthenticated(true);
+      }
+      setIsLoading(false);
+    });
   }, []);
 
-  const login = (email, password) => {
-    const result = authService.login(email, password);
+  const login = async (email, password) => {
+    const result = await authService.login(email, password);
     if (result.success) {
       setUser(result.user);
       setIsAuthenticated(true);
@@ -34,8 +32,8 @@ export function AuthProvider({ children }) {
     return result;
   };
 
-  const register = (userData) => {
-    const result = authService.register(userData);
+  const register = async (userData) => {
+    const result = await authService.register(userData);
     if (result.success) {
       setUser(result.user);
       setIsAuthenticated(true);
@@ -49,9 +47,9 @@ export function AuthProvider({ children }) {
     setIsAuthenticated(false);
   };
 
-  const updateProfile = (updates) => {
+  const updateProfile = async (updates) => {
     if (!user) return { success: false, error: 'No autenticado.' };
-    const result = authService.updateProfile(user.id, updates);
+    const result = await authService.updateProfile(user.id, updates);
     if (result.success) {
       setUser(result.user);
     }
