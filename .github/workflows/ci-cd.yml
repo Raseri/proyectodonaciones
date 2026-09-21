@@ -1,0 +1,51 @@
+name: CI/CD
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  ci:
+    name: Tests, coverage and build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run tests and coverage
+        run: npm run test:coverage -- --runInBand
+
+      - name: Upload coverage artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage
+          path: coverage/
+          if-no-files-found: warn
+
+      - name: Build frontend
+        run: npm run build
+
+  deployment-pending:
+    name: Deployment pending hosting configuration
+    needs: ci
+    if: ${{ false }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deployment not configured
+        run: echo "Deployment is pending hosting, URL and repository secrets configuration."
