@@ -28,6 +28,7 @@ export async function initializeDatabase() {
     )
   `);
 
+  seedDemoUsers();
   seedAdminFromEnvironment();
   saveDatabase();
   return db;
@@ -61,6 +62,25 @@ export function run(sql, params = []) {
   statement.free();
   saveDatabase();
   return getOne('SELECT last_insert_rowid() AS id');
+}
+
+// Crea las cuentas visibles en LoginPage solo si todavía no existen.
+export function seedDemoUsers() {
+  const demoUsers = [
+    { name: 'Administrador', email: 'admin@donaciones.com', password: 'admin123', role: 'ADMIN' },
+    { name: 'María', email: 'maria@correo.com', password: 'user123', role: 'USER' },
+  ];
+
+  for (const demoUser of demoUsers) {
+    const existing = getOne('SELECT id FROM users WHERE email = ?', [demoUser.email]);
+    if (!existing) {
+      const passwordHash = bcrypt.hashSync(demoUser.password, 10);
+      run(
+        'INSERT INTO users (name, email, password_hash, role) VALUES (?, ?, ?, ?)',
+        [demoUser.name, demoUser.email, passwordHash, demoUser.role]
+      );
+    }
+  }
 }
 
 // El administrador se crea solo cuando se configuran credenciales de entorno.
