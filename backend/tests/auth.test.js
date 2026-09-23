@@ -85,13 +85,13 @@ describe('Registro', () => {
     expect(response.status).toBe(409);
   });
 
-  test('permite crear una cuenta ADMIN cuando el cliente elige ese rol', async () => {
+  test('rechaza que el cliente se autoasigne el rol ADMIN en el registro', async () => {
     const { response, credentials } = await registerUser({ role: 'ADMIN' });
     const storedUser = database.getOne('SELECT role FROM users WHERE email = ?', [credentials.email]);
 
     expect(response.status).toBe(201);
-    expect(response.body.user.role).toBe('ADMIN');
-    expect(storedUser.role).toBe('ADMIN');
+    expect(response.body.user.role).toBe('USER');
+    expect(storedUser.role).toBe('USER');
   });
 });
 
@@ -159,14 +159,17 @@ describe('JWT y autenticación', () => {
     expect(response.status).toBe(401);
   });
 
-  test('rechaza el acceso si JWT_SECRET no está configurado', async () => {
+  test('rechaza el acceso si JWT_SECRET no está configurado en entorno no seguro', async () => {
     const token = await login(process.env.ADMIN_EMAIL, process.env.ADMIN_PASSWORD);
     const originalSecret = process.env.JWT_SECRET;
-    delete process.env.JWT_SECRET;
+    const originalNodeEnv = process.env.NODE_ENV;
+    process.env.JWT_SECRET = '';
+    process.env.NODE_ENV = 'production';
 
     const response = await request(app).get('/api/users/me').set('Authorization', `Bearer ${token}`);
 
     process.env.JWT_SECRET = originalSecret;
+    process.env.NODE_ENV = originalNodeEnv;
     expect(response.status).toBe(500);
   });
 });

@@ -28,3 +28,9 @@ dist-ssr/
 
 # Backend data
 backend/data/
+
+# OWASP ZAP reports
+reports/
+*.html
+*.json
+*.xml

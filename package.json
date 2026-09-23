@@ -9,7 +9,11 @@
     "preview": "vite preview",
     "backend": "node backend/src/server.js",
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
-    "test:coverage": "node --experimental-vm-modules node_modules/jest/bin/jest.js --coverage"
+    "test:coverage": "node --experimental-vm-modules node_modules/jest/bin/jest.js --coverage",
+    "security:zap": "node scripts/run-zap.js",
+    "security:zap:baseline": "node scripts/run-zap.js baseline",
+    "security:zap:full": "node scripts/run-zap.js full",
+    "security:zap:docker": "USE_DOCKER=true node scripts/run-zap.js"
   },
   "dependencies": {
     "bcryptjs": "^3.0.2",

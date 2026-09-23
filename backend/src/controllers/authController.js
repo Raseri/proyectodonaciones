@@ -29,16 +29,16 @@ function createToken(user) {
 }
 
 export function register(req, res) {
-  const { name, email, password, role } = req.body;
+  const { name, email, password } = req.body;
   const normalizedEmail = email.trim().toLowerCase();
-  const normalizedRole = role === 'ADMIN' ? 'ADMIN' : 'USER';
+  const normalizedRole = 'USER';
   const existing = getOne('SELECT id FROM users WHERE email = ?', [normalizedEmail]);
 
   if (existing) {
     return res.status(409).json({ error: 'El email ya está registrado.' });
   }
 
-  const passwordHash = bcrypt.hashSync(password, 10);
+  const passwordHash = bcrypt.hashSync(password, 12);
   run(
     'INSERT INTO users (name, email, password_hash, role) VALUES (?, ?, ?, ?)',
     [name.trim(), normalizedEmail, passwordHash, normalizedRole]
