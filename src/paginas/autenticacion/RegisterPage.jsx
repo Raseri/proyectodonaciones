@@ -52,7 +52,7 @@ export default function RegisterPage() {
       <div className="auth-bg-decoration" />
       <div className="auth-container auth-container-wide animate-slide-up">
         <div className="auth-header">
-          <div className="auth-logo">💝</div>
+          <div className="auth-logo">67</div>
           <h1 className="auth-title">Crear Cuenta</h1>
           <p className="auth-subtitle">Únete al Sistema de Donaciones</p>
         </div>
