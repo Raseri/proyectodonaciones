@@ -1,0 +1,22 @@
+# ============================================
+# Backend — Node.js + Express + sql.js (SQLite)
+# ============================================
+FROM node:20-alpine
+
+WORKDIR /app
+
+# Copy dependency manifests first (maximises cache hits)
+COPY package.json package-lock.json ./
+
+# Install ONLY production dependencies
+RUN npm ci --omit=dev
+
+# Copy backend source code
+COPY backend/ ./backend/
+
+# Create the data directory for SQLite persistence
+RUN mkdir -p backend/data
+
+EXPOSE 3000
+
+CMD ["node", "backend/src/server.js"]

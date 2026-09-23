@@ -1,0 +1,51 @@
+# Dependencies
+node_modules/
+
+# Build output (regenerated inside container)
+dist/
+dist-ssr/
+
+# Version control
+.git/
+.github/
+
+# Environment files (injected via docker-compose)
+.env
+.env.local
+.env.*.local
+
+# IDE / Editor
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Test / Coverage
+coverage/
+jest.config.js
+
+# Docker folder itself (avoid recursion)
+dockerinsano/
+
+# Reports
+reports/
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+
+# Backend data (created at runtime)
+backend/data/
+
+# Miscellaneous
+fotos/
+sonar-project.properties
+README.md
