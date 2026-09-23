@@ -5,13 +5,14 @@
 import { useState } from 'react';
 import { Link, useNavigate, Navigate } from 'react-router-dom';
 import { useAuth } from '../../contexto/AuthContext';
+import { ROLES } from '../../utilidades/constants';
 import './AuthPages.css';
 
 export default function RegisterPage() {
   const { register, isAuthenticated } = useAuth();
   const navigate = useNavigate();
   const [form, setForm] = useState({
-    nombre: '', apellido: '', email: '', password: '', confirmPassword: '', telefono: '', direccion: '',
+    nombre: '', apellido: '', email: '', password: '', confirmPassword: '', telefono: '', direccion: '', role: ROLES.USER,
   });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -35,7 +36,10 @@ export default function RegisterPage() {
     }
 
     setLoading(true);
-    const result = await register(form);
+    const result = await register({
+      ...form,
+      role: form.role || ROLES.USER,
+    });
     if (result.success) navigate('/dashboard');
     else setError(result.error);
     setLoading(false);
@@ -90,15 +94,23 @@ export default function RegisterPage() {
 
           <div className="auth-form-grid">
             <div className="form-group">
+              <label className="form-label" htmlFor="reg-role">Tipo de cuenta</label>
+              <select id="reg-role" className="form-input" value={form.role} onChange={e => update('role', e.target.value)}>
+                <option value={ROLES.USER}>Usuario normal</option>
+                <option value={ROLES.ADMIN}>Administrador</option>
+              </select>
+            </div>
+            <div className="form-group">
               <label className="form-label" htmlFor="reg-telefono">Teléfono</label>
               <input id="reg-telefono" type="tel" className="form-input" placeholder="+52 555 000 0000"
                 value={form.telefono} onChange={e => update('telefono', e.target.value)} />
             </div>
-            <div className="form-group">
-              <label className="form-label" htmlFor="reg-direccion">Dirección</label>
-              <input id="reg-direccion" type="text" className="form-input" placeholder="Tu dirección"
-                value={form.direccion} onChange={e => update('direccion', e.target.value)} />
-            </div>
+          </div>
+
+          <div className="form-group">
+            <label className="form-label" htmlFor="reg-direccion">Dirección</label>
+            <input id="reg-direccion" type="text" className="form-input" placeholder="Tu dirección"
+              value={form.direccion} onChange={e => update('direccion', e.target.value)} />
           </div>
 
           <button type="submit" className="btn btn-primary btn-lg auth-submit" disabled={loading}>

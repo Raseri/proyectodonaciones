@@ -29,8 +29,9 @@ function createToken(user) {
 }
 
 export function register(req, res) {
-  const { name, email, password } = req.body;
+  const { name, email, password, role } = req.body;
   const normalizedEmail = email.trim().toLowerCase();
+  const normalizedRole = role === 'ADMIN' ? 'ADMIN' : 'USER';
   const existing = getOne('SELECT id FROM users WHERE email = ?', [normalizedEmail]);
 
   if (existing) {
@@ -40,7 +41,7 @@ export function register(req, res) {
   const passwordHash = bcrypt.hashSync(password, 10);
   run(
     'INSERT INTO users (name, email, password_hash, role) VALUES (?, ?, ?, ?)',
-    [name.trim(), normalizedEmail, passwordHash, 'USER']
+    [name.trim(), normalizedEmail, passwordHash, normalizedRole]
   );
   const user = getOne('SELECT * FROM users WHERE email = ?', [normalizedEmail]);
 

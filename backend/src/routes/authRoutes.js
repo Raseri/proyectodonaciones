@@ -21,6 +21,7 @@ router.post('/register', [
   body('name').isString().trim().notEmpty().withMessage('El nombre es obligatorio.'),
   body('email').isEmail().withMessage('El email debe ser válido.').normalizeEmail(),
   body('password').isString().isLength({ min: 6 }).withMessage('La contraseña debe tener al menos 6 caracteres.'),
+  body('role').optional().isIn(['USER', 'ADMIN']).withMessage('El rol debe ser USER o ADMIN.'),
   validateRequest,
 ], register);
 

@@ -85,13 +85,13 @@ describe('Registro', () => {
     expect(response.status).toBe(409);
   });
 
-  test('ignora role ADMIN enviado por el cliente', async () => {
+  test('permite crear una cuenta ADMIN cuando el cliente elige ese rol', async () => {
     const { response, credentials } = await registerUser({ role: 'ADMIN' });
     const storedUser = database.getOne('SELECT role FROM users WHERE email = ?', [credentials.email]);
 
     expect(response.status).toBe(201);
-    expect(response.body.user.role).toBe('USER');
-    expect(storedUser.role).toBe('USER');
+    expect(response.body.user.role).toBe('ADMIN');
+    expect(storedUser.role).toBe('ADMIN');
   });
 });
 

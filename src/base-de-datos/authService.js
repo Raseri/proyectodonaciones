@@ -40,11 +40,16 @@ export const authService = {
     }
   },
 
-  async register({ nombre, apellido, email, password }) {
+  async register({ nombre, apellido, email, password, role }) {
     try {
       const data = await request('/auth/register', {
         method: 'POST',
-        body: JSON.stringify({ name: `${nombre} ${apellido}`.trim(), email, password }),
+        body: JSON.stringify({
+          name: `${nombre} ${apellido}`.trim(),
+          email,
+          password,
+          role: role || 'USER',
+        }),
       });
       localStorage.setItem(TOKEN_KEY, data.token);
       return { success: true, user: mapUser(data.user) };
