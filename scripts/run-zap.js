@@ -40,8 +40,9 @@ function resolveZapCommand() {
       command: 'docker',
       args: [
         'run', '--rm',
+        '--add-host=host.docker.internal:host-gateway',
         '-v', `${process.cwd()}:/zap/wrk:rw`,
-        'owasp/zap2docker-stable',
+        'ghcr.io/zaproxy/zaproxy:stable',
         'zap.sh',
         '-cmd',
         '-quickurl', targetUrl,
