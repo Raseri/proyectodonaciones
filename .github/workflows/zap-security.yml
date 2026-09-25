@@ -1,13 +1,11 @@
 name: OWASP ZAP Security Scan
 
-# Escaneo manual durante el Sprint 1. Así el pipeline principal se mantiene
-# rápido y estable; la prueba de seguridad puede ejecutarse cuando se necesite.
 on:
   workflow_dispatch:
 
 jobs:
   zap-scan:
-    name: ZAP scan for auth and access control
+    name: OWASP ZAP Security Scan
     runs-on: ubuntu-latest
 
     steps:
@@ -23,23 +21,17 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Start backend
-        env:
-          JWT_SECRET: zap-ci-only-secret
-        run: |
-          npm run backend > backend.log 2>&1 &
-          sleep 10
-
       - name: Install OWASP ZAP
         run: |
           wget -q https://github.com/zaproxy/zaproxy/releases/download/v2.16.1/ZAP_2.16.1_Linux.tar.gz -O zap.tar.gz
           mkdir -p zap-tool
           tar -xzf zap.tar.gz -C zap-tool --strip-components=1
-          echo "$PWD/zap-tool" >> $GITHUB_PATH
+          chmod +x zap-tool/zap.sh
 
-      - name: Run ZAP baseline scan
+      - name: Run OWASP ZAP
         env:
-          TARGET_URL: http://localhost:3000
+          TARGET_URL: https://TU-FRONTEND.onrender.com
+          ZAP_PATH: ${{ github.workspace }}/zap-tool/zap.sh
         run: npm run security:zap:baseline
 
       - name: Upload ZAP report
@@ -49,3 +41,4 @@ jobs:
           name: zap-report
           path: reports/
           if-no-files-found: warn
+          retention-days: 14
