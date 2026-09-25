@@ -73,15 +73,8 @@ const baseArgs = [
   '-cmd',
   '-quickurl', targetUrl,
   '-quickout', path.join(reportDir, `zap-${mode}-${timestamp}.json`),
-  '-quickprogress',
-  '-config', 'globalexcludeurl.url_list=^https?://localhost:5173$'
+  '-quickprogress'
 ];
-
-if (mode === 'full') {
-  baseArgs.push('-quick');
-} else {
-  baseArgs.push('-quick');
-}
 
 const zapCommand = resolved.command;
 const zapArgs = resolved.args.length > 0 ? resolved.args : baseArgs;
