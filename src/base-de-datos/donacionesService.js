@@ -28,7 +28,7 @@ export const donacionesService = {
   /**
    * Crea una nueva donación.
    */
-  create({ usuarioId, usuarioNombre, organizacionId, titulo, descripcion, categoria, cantidad }) {
+  create({ usuarioId, usuarioNombre, organizacionId, titulo, descripcion, categoria, cantidad, direccionEntrega }) {
     const donations = getDonations();
     const orgs = getOrganizations();
     const org = orgs.find(o => o.id === organizacionId);
@@ -44,6 +44,8 @@ export const donacionesService = {
       categoria,
       cantidad,
       status: DONATION_STATUS.PENDIENTE,
+      direccionEntrega: direccionEntrega || '',
+      ubicacionEntrega: null,
       fechaCreacion: new Date().toISOString(),
       fechaActualizacion: new Date().toISOString(),
     };

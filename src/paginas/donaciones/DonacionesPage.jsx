@@ -132,6 +132,16 @@ export default function DonacionesPage() {
                         👁️ Ver
                       </button>
 
+                      {/* Mapa de rastreo — Visible para todos excepto CANCELADA */}
+                      {d.status !== 'CANCELADA' && (
+                        <button className="btn btn-secondary btn-sm"
+                          onClick={() => navigate(`/donaciones/${d.id}`)}
+                          title="Ver mapa de rastreo"
+                          style={{ color: d.status === 'EN_TRANSITO' ? '#8b5cf6' : d.status === 'ENTREGADA' ? '#10b981' : d.status === 'ACEPTADA' ? '#3b82f6' : '#f59e0b' }}>
+                          🗺️ Mapa
+                        </button>
+                      )}
+
                       {/* Cambiar estado — Solo ADMIN */}
                       {can('changeDonationStatus') && allowedTransitions(d.status).length > 0 && (
                         <button className="btn btn-secondary btn-sm"

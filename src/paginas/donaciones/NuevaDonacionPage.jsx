@@ -15,7 +15,7 @@ export default function NuevaDonacionPage() {
   const orgs = organizacionesService.getActive();
 
   const [form, setForm] = useState({
-    titulo: '', descripcion: '', organizacionId: '', categoria: '', cantidad: '',
+    titulo: '', descripcion: '', organizacionId: '', categoria: '', cantidad: '', direccionEntrega: '',
   });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -103,6 +103,16 @@ export default function NuevaDonacionPage() {
                 <option key={o.id} value={o.id}>{o.nombre} — {o.categoria}</option>
               ))}
             </select>
+          </div>
+
+          <div className="form-group">
+            <label className="form-label" htmlFor="don-dir">Dirección de entrega *</label>
+            <input id="don-dir" type="text" className="form-input"
+              placeholder="Ej: Calle Reforma #45, Guadalajara, Jalisco"
+              value={form.direccionEntrega} onChange={e => update('direccionEntrega', e.target.value)} required />
+            <span style={{ fontSize: 'var(--font-size-xs)', color: 'var(--text-muted)' }}>
+              📍 Esta dirección se usará para el rastreo en el mapa de geolocalización
+            </span>
           </div>
 
           <div style={{ display: 'flex', gap: '0.75rem', justifyContent: 'flex-end', marginTop: '0.5rem' }}>

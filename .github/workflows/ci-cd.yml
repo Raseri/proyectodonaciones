@@ -1,51 +1,101 @@
-name: CI/CD
+name: CI - Tests and Build
 
 on:
   push:
     branches: [main]
   pull_request:
     branches: [main]
+  workflow_dispatch:
 
 permissions:
   contents: read
 
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  NODE_VERSION: '20'
+  JWT_SECRET: 'ci-only-secret-not-for-production'
+  JWT_EXPIRES_IN: '1h'
+  ADMIN_EMAIL: 'admin@ci.local'
+  ADMIN_PASSWORD: 'ci-admin-password'
+
 jobs:
-  ci:
-    name: Tests, coverage and build
+  tests:
+    name: 1. Tests and coverage
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
+      - name: Checkout repository
         uses: actions/checkout@v4
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: ${{ env.NODE_VERSION }}
           cache: npm
 
       - name: Install dependencies
         run: npm ci
 
-      - name: Run tests and coverage
+      - name: Run backend tests with coverage
         run: npm run test:coverage -- --runInBand
 
-      - name: Upload coverage artifact
+      - name: Backend health smoke test
+        shell: bash
+        run: |
+          npm run backend > backend.log 2>&1 &
+          BACKEND_PID=$!
+
+          for attempt in {1..15}; do
+            if curl --fail --silent http://127.0.0.1:3000/api/health > /dev/null; then
+              echo "Backend health check OK"
+              kill "$BACKEND_PID" || true
+              exit 0
+            fi
+            sleep 1
+          done
+
+          echo "Backend did not become healthy in time"
+          cat backend.log
+          kill "$BACKEND_PID" || true
+          exit 1
+
+      - name: Upload coverage report
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: coverage
+          name: coverage-report
           path: coverage/
           if-no-files-found: warn
+          retention-days: 14
 
-      - name: Build frontend
+  build:
+    name: 2. Build frontend
+    runs-on: ubuntu-latest
+    needs: tests
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build Vite application
         run: npm run build
 
-  deployment-pending:
-    name: Deployment pending hosting configuration
-    needs: ci
-    if: ${{ false }}
-    runs-on: ubuntu-latest
-    steps:
-      - name: Deployment not configured
-        run: echo "Deployment is pending hosting, URL and repository secrets configuration."
+      - name: Upload production build
+        uses: actions/upload-artifact@v4
+        with:
+          name: frontend-dist
+          path: dist/
+          if-no-files-found: error
+          retention-days: 14

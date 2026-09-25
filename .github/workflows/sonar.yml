@@ -1,10 +1,8 @@
 name: SonarQube Analysis
 
+# mientras SONAR_TOKEN y SONAR_HOST_URL no estén configurados en GitHub Secrets.
 on:
-  push:
-    branches: [ main, master ]
-  pull_request:
-    types: [ opened, synchronize, reopened ]
+  workflow_dispatch:
 
 jobs:
   sonarqube:
@@ -27,7 +25,7 @@ jobs:
           cache: npm
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci
 
       - name: Run tests with coverage
         run: npm run test:coverage -- --runInBand

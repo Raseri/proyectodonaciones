@@ -2,14 +2,10 @@ name: OWASP ZAP Security Scan
 
 on:
   workflow_dispatch:
-  push:
-    branches: [main]
-  pull_request:
-    branches: [main]
 
 jobs:
   zap-scan:
-    name: ZAP scan for auth and access control
+    name: OWASP ZAP Security Scan
     runs-on: ubuntu-latest
 
     steps:
@@ -25,21 +21,17 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Start backend
-        run: |
-          npm run backend > backend.log 2>&1 &
-          sleep 10
-
       - name: Install OWASP ZAP
         run: |
           wget -q https://github.com/zaproxy/zaproxy/releases/download/v2.16.1/ZAP_2.16.1_Linux.tar.gz -O zap.tar.gz
           mkdir -p zap-tool
           tar -xzf zap.tar.gz -C zap-tool --strip-components=1
-          echo "$PWD/zap-tool" >> $GITHUB_PATH
+          chmod +x zap-tool/zap.sh
 
-      - name: Run ZAP baseline scan
+      - name: Run OWASP ZAP
         env:
-          TARGET_URL: http://localhost:3000
+          TARGET_URL: https://donaciones-frontend.onrender.com
+          ZAP_PATH: ${{ github.workspace }}/zap-tool/zap.sh
         run: npm run security:zap:baseline
 
       - name: Upload ZAP report
@@ -49,3 +41,4 @@ jobs:
           name: zap-report
           path: reports/
           if-no-files-found: warn
+          retention-days: 14
