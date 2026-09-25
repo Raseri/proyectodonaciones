@@ -30,7 +30,7 @@ jobs:
 
       - name: Run OWASP ZAP
         env:
-          TARGET_URL: https://TU-FRONTEND.onrender.com
+          TARGET_URL: https://donaciones-frontend.onrender.com
           ZAP_PATH: ${{ github.workspace }}/zap-tool/zap.sh
         run: npm run security:zap:baseline
 
