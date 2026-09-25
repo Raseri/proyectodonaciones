@@ -871,3 +871,340 @@ a:hover {
     grid-template-columns: 1fr;
   }
 }
+
+/* ── Mapa de Geolocalización (MapaRastreo) ─────────────── */
+.mapa-rastreo-container {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  transition: all var(--transition-base);
+}
+
+.mapa-rastreo-container:hover {
+  border-color: var(--border-medium);
+  box-shadow: var(--shadow-md);
+}
+
+/* ── Header del mapa ── */
+.mapa-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-lg) var(--space-xl);
+  border-bottom: 1px solid var(--border-subtle);
+  gap: var(--space-md);
+  flex-wrap: wrap;
+}
+
+.mapa-header-left {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+}
+
+.mapa-header-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-md);
+  background: var(--bg-glass);
+  border: 1px solid var(--border-subtle);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+}
+
+.mapa-header-title {
+  font-size: var(--font-size-md);
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.mapa-header-subtitle {
+  font-size: var(--font-size-xs);
+  color: var(--text-muted);
+}
+
+.mapa-status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0.3rem 0.75rem;
+  border-radius: 9999px;
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+  border: 1px solid;
+  letter-spacing: 0.02em;
+}
+
+/* ── Info bar ── */
+.mapa-info-bar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-md) var(--space-xl);
+  font-size: var(--font-size-sm);
+  border-bottom: 1px solid;
+}
+
+.mapa-info-icon {
+  flex-shrink: 0;
+}
+
+/* ── Wrapper y contenedor del mapa ── */
+.mapa-wrapper {
+  position: relative;
+  width: 100%;
+  min-height: 380px;
+}
+
+.mapa-leaflet {
+  width: 100%;
+  height: 380px;
+  z-index: 1;
+}
+
+/* ── Estado de carga / error ── */
+.mapa-loading,
+.mapa-error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 380px;
+  gap: var(--space-md);
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+}
+
+.mapa-error span {
+  font-size: 2rem;
+}
+
+/* ── Leyenda ── */
+.mapa-legend {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xl);
+  padding: var(--space-md) var(--space-xl);
+  border-top: 1px solid var(--border-subtle);
+  background: var(--bg-glass);
+  flex-wrap: wrap;
+}
+
+.mapa-legend-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  font-size: var(--font-size-xs);
+  color: var(--text-secondary);
+}
+
+.mapa-legend-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+/* ── Marcadores Personalizados ── */
+.mapa-custom-marker {
+  background: none !important;
+  border: none !important;
+}
+
+.mapa-marker-container {
+  position: relative;
+  width: 48px;
+  height: 60px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.mapa-marker-pulse {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  animation: mapaPulse 2s ease-in-out infinite;
+}
+
+@keyframes mapaPulse {
+  0%, 100% {
+    transform: translateX(-50%) scale(1);
+    opacity: 0.6;
+  }
+  50% {
+    transform: translateX(-50%) scale(2);
+    opacity: 0;
+  }
+}
+
+.mapa-marker-pin {
+  position: relative;
+  width: 36px;
+  height: 36px;
+  border-radius: 50% 50% 50% 0;
+  transform: rotate(-45deg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+  z-index: 2;
+  margin-bottom: 8px;
+}
+
+.mapa-marker-emoji {
+  transform: rotate(45deg);
+  font-size: 16px;
+  line-height: 1;
+}
+
+.mapa-marker-shadow {
+  position: absolute;
+  bottom: -2px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 16px;
+  height: 4px;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 50%;
+  z-index: 1;
+}
+
+/* ── Popups Personalizados ── */
+.mapa-popup-wrapper .leaflet-popup-content-wrapper {
+  background: var(--bg-card);
+  border: 1px solid var(--border-medium);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+  padding: 0;
+  overflow: hidden;
+}
+
+.mapa-popup-wrapper .leaflet-popup-content {
+  margin: 0;
+  width: auto !important;
+}
+
+.mapa-popup-wrapper .leaflet-popup-tip {
+  background: var(--bg-card);
+  border: 1px solid var(--border-medium);
+}
+
+.mapa-popup {
+  min-width: 200px;
+}
+
+.mapa-popup-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #fff;
+}
+
+.mapa-popup-header.origin {
+  background: #3b82f6;
+}
+
+.mapa-popup-header.transit {
+  background: #8b5cf6;
+}
+
+.mapa-popup-header.delivered {
+  background: #10b981;
+}
+
+.mapa-popup-icon {
+  font-size: 16px;
+}
+
+.mapa-popup-body {
+  padding: 10px 14px;
+}
+
+.mapa-popup-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 4px;
+}
+
+.mapa-popup-address {
+  font-size: 12px;
+  color: var(--text-secondary);
+  line-height: 1.4;
+}
+
+.mapa-popup-status {
+  font-size: 12px;
+  color: var(--text-muted);
+  font-weight: 500;
+  margin-top: 2px;
+}
+
+/* ── Fix Leaflet z-index dentro del layout ── */
+.leaflet-container {
+  font-family: var(--font-family) !important;
+  z-index: 1 !important;
+}
+
+.leaflet-control-zoom {
+  border: 1px solid var(--border-medium) !important;
+  border-radius: var(--radius-sm) !important;
+  overflow: hidden;
+  box-shadow: var(--shadow-sm) !important;
+}
+
+.leaflet-control-zoom a {
+  background: var(--bg-card) !important;
+  color: var(--text-primary) !important;
+  border-bottom: 1px solid var(--border-subtle) !important;
+  width: 32px !important;
+  height: 32px !important;
+  line-height: 32px !important;
+  font-size: 16px !important;
+}
+
+.leaflet-control-zoom a:hover {
+  background: var(--bg-glass-hover) !important;
+}
+
+.leaflet-control-attribution {
+  background: var(--bg-glass) !important;
+  color: var(--text-muted) !important;
+  font-size: 10px !important;
+}
+
+.leaflet-control-attribution a {
+  color: var(--text-secondary) !important;
+}
+
+/* ── Responsive del mapa ── */
+@media (max-width: 768px) {
+  .mapa-wrapper,
+  .mapa-leaflet,
+  .mapa-loading,
+  .mapa-error {
+    min-height: 280px;
+    height: 280px;
+  }
+
+  .mapa-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .mapa-legend {
+    gap: var(--space-md);
+  }
+}
